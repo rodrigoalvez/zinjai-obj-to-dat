@@ -15,6 +15,15 @@ tab_use_spaces=0
 explorer_path=.
 inherits_from=
 path_char=\
+[other]
+path=.gitignore
+cursor=0:0
+[other]
+path=LICENSE
+cursor=0:0
+[other]
+path=README.md
+cursor=0:0
 [config]
 name=Debug
 toolchain=
