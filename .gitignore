@@ -5,7 +5,8 @@
 *.slo
 *.lo
 *.o
-*.obj
+# We need .obj files so this has to be commented
+# *.obj
 
 # Precompiled Headers
 *.gch

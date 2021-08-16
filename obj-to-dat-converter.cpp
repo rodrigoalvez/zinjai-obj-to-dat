@@ -56,7 +56,7 @@ bool readObjFile(string filename,vector<Node> &nodes,vector<Element> &elements){
 	/// We first read the file.
 	ifstream inFile("filesToConvert/" + filename + ".obj");
 	if(!inFile.is_open()){
-		cerr << "Error, the file '"<<filename<<".obj'"<<" doesn't couldn't be found."<<endl;
+		cerr << "Error, the file '"<<filename<<".obj'"<<" doesn't couldn't be found."<<endl<<endl;
 		return false;
 	};
 	
@@ -73,10 +73,10 @@ bool readObjFile(string filename,vector<Node> &nodes,vector<Element> &elements){
 			// We read the coordinates.
 			inFile >> x >> y >> z;
 			// Then we add the nodes.
-			nodes.push_back(nodes(x,y,z));
+			nodes.push_back(Node(x,y,z));
 			// And finally we jump to the next line.
 			inFile.ignore();
-		};
+		}
 		/// Faces' copying.
 		else if(string(quote) == "f"){
 			inFile.ignore();
@@ -86,8 +86,8 @@ bool readObjFile(string filename,vector<Node> &nodes,vector<Element> &elements){
 			// Then we set the chain in a node array.
 			nodeChain(ss,s);
 			// And we add the faces.
-			if(s.size()==3)	elements.push_back(Elemento(getNode(s[0]), getNode(s[1]), getNode(s[2])));
-			else			elements.push_back(Elemento(getNode(s[0]), getNode(s[1]), getNode(s[2]), getNode(s[3])));
+			if(s.size()==3)	elements.push_back(Element(getNode(s[0]), getNode(s[1]), getNode(s[2])));
+			else			elements.push_back(Element(getNode(s[0]), getNode(s[1]), getNode(s[2]), getNode(s[3])));
 		}
 		/// If the quote's invalid we jump to the next line.
 		else {
@@ -102,7 +102,7 @@ bool readObjFile(string filename,vector<Node> &nodes,vector<Element> &elements){
 /// Function that creates the file to be read using C++.
 void createDatFile(string filename, vector<Node> &nodes,vector<Element> &elements){
 	// First we create the file.
-	ofstream outFile("filesToConvert/" + filename + ".dat", ios::binary | ios::trunc);
+	ofstream outFile("createdDatFiles/" + filename + ".dat", ios::binary | ios::trunc);
 	// Then write the nodes.
 	outFile << nodes.size() << endl;
 	for(size_t i=0;i<nodes.size();i++){
@@ -140,14 +140,15 @@ int main() {
 		
 		//Copying the file's data.
 		cout<<endl<<"Reading "<<filename<<".obj..."<<endl;
-		/// if(!LeeArchivoObj(Nombre,nodes,Elementos))	return -1;
-		cout<<"Reading finished. Information loaded in memory."<<endl<<endl;
-		
-		//Creating the .dat file.
-		cout<<"Creating "<<filename<<".dat file..."<<endl;
-		/// CrearArchivoDat(Nombre,nodes,Elementos);
-		cout<<"File created successfully."<<endl<<endl;
-		
+		if(readObjFile(filename, nodes, elements)) {
+			cout<<"Reading finished. Information loaded in memory."<<endl<<endl;
+			
+			//Creating the .dat file.
+			cout<<"Creating "<<filename<<".dat file..."<<endl;
+			createDatFile(filename, nodes, elements);
+			cout<<"File created successfully."<<endl<<endl;
+		};
+	
 		cout<<"Press ESC to quit or any other key to transform a model file."<<endl<<endl;
 	};
 	
